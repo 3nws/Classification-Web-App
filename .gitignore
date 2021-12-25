@@ -1,0 +1,10 @@
+
+mysite/.env
+mysite/__pycache__/
+*.pyc
+*.pyc
+mysite/static/img/
+*.csv
+*.zip
+mysite/static/models/
+mysite/static/vector/

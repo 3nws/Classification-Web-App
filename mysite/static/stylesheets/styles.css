@@ -1,0 +1,152 @@
+@import url("https://fonts.googleapis.com/css?family=Abel|Abril+Fatface|Alegreya|Arima+Madurai|Dancing+Script|Dosis|Merriweather|Oleo+Script|Overlock|PT+Serif|Pacifico|Playball|Playfair+Display|Share|Unica+One|Vibur");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 10rem rgba(0, 0, 0, 0.7);
+  font-family: "Vibur", cursive;
+  font-family: "Abel", sans-serif;
+  font-size: 1.25rem;
+}
+
+header {
+  margin: 0 auto 10% auto;
+  text-align: center;
+}
+
+.analyze-form {
+  width: 450px;
+  min-height: 500px;
+  height: auto;
+  border-radius: 5px;
+  margin: 2% auto;
+  box-shadow: 0 9px 50px hsla(20, 67%, 75%, 0.31);
+  padding: 2%;
+  background-image: linear-gradient(-205deg, #545454 50%, #212121 50%);
+}
+
+.analyze-form .con {
+  display: -webkit-flex;
+  display: flex;
+
+  -webkit-justify-content: space-around;
+  justify-content: space-around;
+
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+
+  margin: 0 auto;
+}
+
+header h2 {
+  font-size: 250%;
+  font-family: "Playfair Display", serif;
+  color: black;
+}
+
+header p {
+  letter-spacing: 0.05em;
+  color: white;
+}
+
+label {
+  font-family: "Abel", sans-serif;
+  color: white;
+}
+
+.form-input {
+  width: 200px;
+  height: 50px;
+
+  margin-top: 2%;
+  padding: 15px;
+
+  font-size: 16px;
+  font-family: "Abel", sans-serif;
+  color: #5e6472;
+
+  outline: none;
+  border: none;
+
+  border-radius: 0px 5px 5px 0px;
+  transition: 0.2s linear;
+}
+
+.form-input:focus {
+  transform: translateX(-2px);
+  border-radius: 5px;
+}
+
+.nav-link {
+  padding: 0.25rem 0;
+  font-weight: 700;
+  margin-left: 1rem;
+  border-bottom: 0.25rem solid transparent;
+  color: black;
+}
+
+.nav-link:hover {
+  color: rgba(73, 83, 109, 1);
+  border-bottom-color: rgba(73, 83, 109, 0.5);
+}
+
+.nav-link .active {
+}
+
+.btn-secondary,
+.btn-secondary:hover {
+  color: white;
+  text-shadow: none;
+}
+
+.carousel {
+  background-color: #7a7a7a;
+}
+
+.carousel img {
+  width: 695 !important;
+  height: 600px !important;
+  margin: 0 auto;
+}
+
+.text {
+  color: white;
+  padding: 16px 32px;
+  text-shadow: 0 0.05rem 0.1rem rgba(255, 255, 255, 0.75);
+  font-weight: bold;
+}
+
+.middle {
+  transition: 0.75s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.overlay:hover .image {
+  transition: 0.75s ease;
+  opacity: 0.3;
+}
+
+.overlay:hover .middle {
+  transition: 0.75s ease;
+  opacity: 1;
+}
+
+.carousel-control-next-icon,
+.carousel-control-prev-icon {
+  width: 5vw;
+  height: 5vw;
+}
