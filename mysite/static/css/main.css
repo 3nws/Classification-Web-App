@@ -811,7 +811,7 @@ legend {
 }
 
 .s003 {
-  min-height: 100vh;
+  height: 90vh;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-pack: center;
@@ -819,7 +819,6 @@ legend {
   -ms-flex-align: center;
       align-items: center;
   font-family: 'Poppins', sans-serif;
-  background-color: #a598ee;
   background-size: cover;
   background-position: center center;
   padding: 15px;
@@ -911,7 +910,8 @@ legend {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
+  margin-top: 1em;
   height: 100%;
   opacity: 1;
   color: #888;
@@ -921,13 +921,15 @@ legend {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
+  margin-top: 1em;
   height: 100%;
   color: #555;
 }
 
 .s003 form .inner-form .input-field.first-wrap .choices[data-type*="select-one"]:after {
   right: 30px;
+  margin-top: 0.3em;
   border-color: #e5e5e5 transparent transparent transparent;
 }
 
@@ -945,8 +947,8 @@ legend {
 }
 
 .s003 form .inner-form .input-field.first-wrap .choices__list--dropdown .choices__item--selectable.is-highlighted {
-  background: #fff;
-  color: #63c76a;
+  background: #a0a0a0;
+  color: #d5d5d5;
 }
 
 .s003 form .inner-form .input-field.first-wrap .choices__list--dropdown .choices__item {
@@ -970,7 +972,7 @@ legend {
   color: #fff;
   border: 0;
   cursor: pointer;
-  background: #63c76a;
+  background: #a0a0a0;
   transition: all .2s ease-out, color .2s ease-out;
 }
 
@@ -978,8 +980,12 @@ legend {
   width: 16px;
 }
 
+#search-btn:hover #search-icon {
+  color: #a0a0a0;
+}
+
 .s003 form .inner-form .input-field.third-wrap .btn-search:hover {
-  background: #50c058;
+  background: #d5d5d5;
 }
 
 .s003 form .inner-form .input-field.third-wrap .btn-search:focus {
@@ -1015,6 +1021,7 @@ legend {
   }
   .s003 form .inner-form .input-field.first-wrap .choices[data-type*="select-one"]:after {
     right: 11.5px;
+    margin-top: 0.3em;
     border-color: #e5e5e5 transparent transparent transparent;
   }
   .s003 form .inner-form .input-field.second-wrap {

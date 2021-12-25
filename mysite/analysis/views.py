@@ -7,6 +7,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from collections import Counter
+from time import sleep
 
 import pickle
 import pandas as pd
@@ -41,6 +42,13 @@ def extract_tweets(query, limit):
     c.Lang = "en"
     c.Limit = limit
     c.Store_csv = True
+    try:
+        os.remove("static/data/tweets.csv")
+        os.remove("static/data/analysis/tweets.csv")
+        os.remove("static/data/analysis/predictions.csv")
+        os.remove("static/data/analysis/merged.csv")
+    except:
+        pass
     c.Output = "static/data/tweets.csv"
     c.Pandas = True
 
@@ -61,7 +69,13 @@ def result(request):
     model, vector, token = load_model()
     
     if choice == 'Keywords':
-        dataset = extract_tweets(text, 1000)
+        flag = True
+        while flag:
+            try:
+                dataset = extract_tweets(text, 1000)
+                flag = False
+            except:
+                sleep(1)
         # removing the unnecessary columns.
         dataset = dataset[['sentiment','tweet']]
         X = dataset['tweet'].fillna(' ')
@@ -115,7 +129,7 @@ def result(request):
         context = {
             'sentiment': sentiment,
         }
-        return render(request, './result.html', context=context)
+        return render(request, './tweets_result.html', context=context)
     analysis = vector.transform([text])
     
     polarity = model.predict(analysis)
@@ -124,4 +138,4 @@ def result(request):
     context = {
         'sentiment': sentiment,
     }
-    return render(request, './result.html', context=context)
+    return render(request, './text_result.html', context=context)

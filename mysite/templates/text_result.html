@@ -16,21 +16,15 @@
         </div>
       </div>
       <div class="input-field second-wrap">
-        <input
-          id="search"
-          type="text"
-          name="document"
-          placeholder="Enter Keywords?"
-        />
+        <input id="search" type="text" name="document" placeholder="Enter Keywords?" />
       </div>
       <div class="input-field third-wrap">
-        <button class="btn-search" id="search-btn" type="submit">
+        <button class="btn-search" type="submit">
           <svg
             class="svg-inline--fa fa-search fa-w-16"
             aria-hidden="true"
             data-prefix="fas"
             data-icon="search"
-            id="search-icon"
             role="img"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
@@ -43,13 +37,11 @@
         </button>
       </div>
     </div>
+    {% if sentiment == "Positive" %}
+        <img class="mt-1 ml-auto center" src="{% static 'img/positive.png' %}" alt="">
+    {% else %}
+        <img class="mt-1 ml-auto center" src="{% static 'img/negative.png' %}" alt="">
+    {% endif %}
   </form>
-  <h2>{{ sentiment }}</h2>
 </div>
-
-<style>
-  .s003 {
-    height: 66vh;
-  }
-</style>
 {% endblock %}
