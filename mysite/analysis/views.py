@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, StreamingHttpResponse
+from wsgiref.util import FileWrapper
 
 from matplotlib.gridspec import GridSpec
 from nltk.tokenize import RegexpTokenizer
@@ -8,7 +9,12 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from collections import Counter
 from time import sleep
+from nltk.tokenize import word_tokenize, RegexpTokenizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import LinearSVC
 
+import re
 import pickle
 import pandas as pd
 import numpy as np
@@ -18,6 +24,7 @@ import matplotlib.cm as cm
 import matplotlib as mpl
 import os
 import twint
+import mimetypes
 
 algorithm = 'mnb'
 acc = '77'
@@ -25,6 +32,34 @@ file_name = 'static/models/'+algorithm.upper()+'_model_'+acc
 
 # Create your views here.
 
+algorithms = {
+    'mnb': MultinomialNB(),
+    'lrg': LogisticRegression(random_state=0, class_weight='balanced'),
+    'svc': LinearSVC(),
+}
+
+def download_model(request):
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    filename = 'model'
+    filepath = base_dir + '/static/trained_models/' + filename
+    thefile = filepath
+    filename = os.path.basename(thefile)
+    response = StreamingHttpResponse(FileWrapper(open(thefile, 'rb')), content_type=mimetypes.guess_type(thefile)[0])
+    response['Content-Length'] = os.path.getsize(thefile)
+    response['Content-Disposition'] = "Attachment;filename=%s" % filename
+    return response
+
+def download_vector(request):
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    filename = 'tfidf_vectorizer'
+    filepath = base_dir + '/static/fitted_vector/' + filename
+    thefile = filepath
+    filename = os.path.basename(thefile)
+    response = StreamingHttpResponse(FileWrapper(open(thefile, 'rb')), content_type=mimetypes.guess_type(thefile)[0])
+    response['Content-Length'] = os.path.getsize(thefile)
+    response['Content-Disposition'] = "Attachment;filename=%s" % filename
+    return response
+    
 def load_model():
     with open(file_name, 'rb') as f:
         model = pickle.load(f)
@@ -60,6 +95,61 @@ def extract_tweets(query, limit):
 def index(request):
     return render(request, './query.html')
 
+def train(request):
+    return render(request, './train.html')
+
+def train_result(request):
+    DATASET_ENCODING = "ISO-8859-1"
+    dataset = pd.read_csv(request.FILES['csv_file'], delimiter=',', encoding=DATASET_ENCODING)
+    form = request.POST
+    text = form['column_1']
+    target = form['column_2']
+    max_features = int(form['max_features'])
+    test_size = float(form['test-size'])
+    algorithm = str(form['algo'])
+    
+    dataset = dataset[[text,target]]
+    dataset.drop_duplicates()
+    
+    token = RegexpTokenizer(r'[a-zA-Z0-9]+')
+
+    tfidf = TfidfVectorizer(stop_words='english', max_features=max_features, ngram_range=(1,2), tokenizer=token.tokenize)
+
+    X = dataset[text]
+
+    X = tfidf.fit_transform(dataset[text])
+
+    y = dataset[target]
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=5)
+    
+    # creating the model using multinomial naive bayes algorithm
+    model = algorithms[algorithm]
+
+    # training the model
+    model.fit(X_train, y_train)
+
+    # testing our predictions
+    y_pred = model.predict(X_test)
+
+    acc = classification_report(y_test, y_pred, output_dict=True)
+    
+    # exporting the model and the trained vectorizer
+    pickle.dump(model, open('static/trained_models/model', 'wb'))
+    pickle.dump(tfidf, open('static/fitted_vector/tfidf_vectorizer', 'wb'))
+    
+    with open('static/trained_models/model', 'rb') as f:
+        model = pickle.load(f)
+    
+    tfidf = pickle.load(open(f'static/fitted_vector/tfidf_vectorizer',"rb"))
+    
+    context = {
+        'acc': int((float(acc.get("accuracy"))*100)),
+        'model': model,
+        'vector': tfidf,
+    }
+    
+    return render(request, './train_result.html', context=context)
 
 def result(request):
     form = request.POST

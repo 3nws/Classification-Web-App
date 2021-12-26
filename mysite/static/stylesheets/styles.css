@@ -6,6 +6,13 @@
   box-sizing: border-box;
 }
 
+.result {
+  margin: 0;
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+}
+
 .center {
   display: block;
   margin-left: auto;
