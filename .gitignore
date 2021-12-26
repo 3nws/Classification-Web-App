@@ -8,3 +8,5 @@ mysite/static/img/
 *.zip
 mysite/static/models/
 mysite/static/vector/
+mysite/static/fitted_vector/
+mysite/static/trained_models/
