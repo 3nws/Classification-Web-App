@@ -38,21 +38,6 @@ algorithms = {
     'svc': LinearSVC(),
 }
 
-months = {
-    'January': 1,
-    'February': 2,
-    'March': 3,
-    'April': 4,
-    'May': 5,
-    'June': 6,
-    'July': 7,
-    'August': 8,
-    'September': 9,
-    'October': 10,
-    'November': 11,
-    'December': 12,
-}
-
 def download_model(request):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     filename = 'model'
@@ -85,13 +70,11 @@ def load_model():
     
     return model, tfidf, token
 
-def extract_tweets(query, limit, year, month):
+def extract_tweets(query, limit):
     # Configure
     c = twint.Config()
     c.Search = str(query)
     c.Lang = "en"
-    c.Since = f"{year}-{month}-1"
-    c.Until = f"{year}-{str(months[month]+1)}-1" if months[month] != 12 else f"{str(year+1)}-1-1"
     c.Limit = limit
     c.Store_csv = True
     try:
@@ -172,8 +155,6 @@ def result(request):
     form = request.POST
     choice = form['choice']
     text = form['document']
-    year = str(form['year'])
-    month = str(form['month'])
     
     model, vector, token = load_model()
     
@@ -181,7 +162,7 @@ def result(request):
         flag = True
         while flag:
             try:
-                dataset = extract_tweets(text, 1000, year, month)
+                dataset = extract_tweets(text, 1000)
                 flag = False
             except:
                 sleep(1)
@@ -231,7 +212,7 @@ def result(request):
 
         colors = ['g', 'r']
 
-        plt.subplot(aspect=1, title=f'Results for {month} in {year}')
+        plt.subplot(aspect=1, title=f'Results')
         type_show_ids = plt.pie(type_counts, labels=type_labels, autopct='%1.1f%%', shadow=True, colors=colors)
         plt.savefig("static/img/sentiments.png", transparent=True)
         sentiment = 'static/img/sentiments.png'

@@ -137,7 +137,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      position: 'auto',
 	      resetScrollPosition: true,
 	      regexFilter: null,
-	      shouldSort: false,
+	      shouldSort: true,
 	      shouldSortItems: false,
 	      sortFilter: _utils.sortByAlpha,
 	      placeholder: true,
