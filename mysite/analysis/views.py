@@ -90,8 +90,10 @@ def extract_tweets(query, limit, year, month):
     c = twint.Config()
     c.Search = str(query)
     c.Lang = "en"
-    c.Since = f"{year}-{month}-1"
-    c.Until = f"{year}-{str(months[month]+1)}-1" if months[month] != 12 else f"{str(year+1)}-1-1"
+    if year:
+        month = months[month]
+        c.Since = f"{year}-{month}-1"
+        c.Until = f"{year}-{str(month+1)}-1" if month != 12 else f"{str(year+1)}-1-1"
     c.Limit = limit
     c.Store_csv = True
     try:
@@ -172,8 +174,11 @@ def result(request):
     form = request.POST
     choice = form['choice']
     text = form['document']
-    year = str(form['year'])
-    month = str(form['month'])
+    year = form['year']
+    month_name = form['month']
+    
+    if year == 'Year' or month_name == 'Month':
+        year = None
     
     model, vector, token = load_model()
     
@@ -181,9 +186,10 @@ def result(request):
         flag = True
         while flag:
             try:
-                dataset = extract_tweets(text, 1000, year, month)
+                dataset = extract_tweets(text, 100, year, month_name)
                 flag = False
-            except:
+            except Exception as e:
+                print(e)
                 sleep(1)
         # removing the unnecessary columns.
         dataset = dataset[['sentiment','tweet']]
@@ -230,15 +236,13 @@ def result(request):
         type_counts = title_type.tweet.sort_values()
 
         colors = ['g', 'r']
-
-        plt.subplot(aspect=1, title=f'Results for {month} in {year}')
+        if year:
+            plt.subplot(aspect=1, title=f'Results for {month_name} in {year}')
+        else:
+            plt.subplot(aspect=1, title=f'Results')
         type_show_ids = plt.pie(type_counts, labels=type_labels, autopct='%1.1f%%', shadow=True, colors=colors)
         plt.savefig("static/img/sentiments.png", transparent=True)
-        sentiment = 'static/img/sentiments.png'
-        context = {
-            'sentiment': sentiment,
-        }
-        return render(request, './tweets_result.html', context=context)
+        return render(request, './tweets_result.html')
     analysis = vector.transform([text])
     
     polarity = model.predict(analysis)

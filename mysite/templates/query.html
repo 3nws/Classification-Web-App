@@ -9,7 +9,7 @@
       <div class="input-field first-wrap">
         <div class="input-select">
           <select data-trigger="" name="choice">
-            <option placeholder="">From</option>
+            <option>From</option>
             <option>Text</option>
             <option>Keywords</option>
           </select>
@@ -45,7 +45,7 @@
       <div class="input-field fourth-wrap">
         <div class="input-select">
           <select data-trigger="" name="year">
-            <option placeholder="">Year</option>
+            <option>Year</option>
             <option>2019</option>
             <option>2020</option>
             <option>2021</option>
@@ -55,7 +55,7 @@
       <div class="input-field fourth-wrap fifth-wrap">
         <div class="input-select">
           <select data-trigger="" name="month">
-            <option placeholder="">Month</option>
+            <option>Month</option>
             <option>January</option>
             <option>February</option>
             <option>March</option>
@@ -72,8 +72,9 @@
         </div>
       </div>
     </div>
+    <p class="text-muted mt-3" align="center" style="font-size: medium;">If you only want to classify your given text, you don't need to select a year or a month.</p>
+    <p class="text-muted" align="center" style="font-size: medium;">Also selecting 'Keywords' may take a few seconds, so please wait. If you don't specify a month or a year the results will not be specific</p>
   </form>
-  <h2>{{ sentiment }}</h2>
 </div>
 
 <style>
