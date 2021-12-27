@@ -1,6 +1,7 @@
 {% extends 'layout.html' %} {% load static %} {% block content %}
 
 <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <div class="container result" align="center">
   <p>Your model's accuracy is %{{ acc }}.</p>
@@ -9,10 +10,10 @@
   <p>Increase the number of maximum</p>
   <p>Use a different classifying algorithm</p>
   <a href="/train/result/download_model"
-    ><button class="btn btn-secondary">Download Your Model</button></a
+    ><button class="btn btn-outline-dark"><i class="fa fa-download"></i> Download Your Model</button></a
   >
   <a href="/train/result/download_vector"
-    ><button class="btn btn-secondary">Download Your Fitted Vector</button></a
+    ><button class="btn btn-outline-dark"><i class="fa fa-download"></i> Download Your Fitted Vector</button></a
   >
 </div>
 
