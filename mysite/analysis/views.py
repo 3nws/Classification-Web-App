@@ -26,6 +26,9 @@ import os
 import twint
 import mimetypes
 
+# clean images
+mpl.use('Agg')
+
 algorithm = 'mnb'
 acc = '77'
 file_name = 'static/models/'+algorithm.upper()+'_model_'+acc
@@ -186,7 +189,7 @@ def result(request):
         flag = True
         while flag:
             try:
-                dataset = extract_tweets(text, 100, year, month_name)
+                dataset = extract_tweets(text, 1000, year, month_name)
                 flag = False
             except Exception as e:
                 print(e)
