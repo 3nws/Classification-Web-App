@@ -4,7 +4,7 @@ from wsgiref.util import FileWrapper
 
 from matplotlib.gridspec import GridSpec
 from nltk.tokenize import RegexpTokenizer
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from collections import Counter
@@ -34,12 +34,6 @@ acc = '77'
 file_name = 'static/models/'+algorithm.upper()+'_model_'+acc
 
 # Create your views here.
-
-algorithms = {
-    'mnb': MultinomialNB(),
-    'lrg': LogisticRegression(random_state=0, class_weight='balanced'),
-    'svc': LinearSVC(),
-}
 
 months = {
     'January': 1,
@@ -121,25 +115,38 @@ def train(request):
     return render(request, './train.html')
 
 def train_result(request):
+    form = request.POST
+    
+    algorithms = {
+        'mnb': MultinomialNB(),
+        'lrg': LogisticRegression(random_state=0, class_weight='balanced'),
+        'svc': LinearSVC(),
+    }
+    
+    token = RegexpTokenizer(r'[a-zA-Z0-9]+')
+    
+    max_features = int(form['max_features'])
+
+    transformers = {
+        'tfidf': TfidfVectorizer(stop_words='english', max_features=max_features, ngram_range=(1,2), tokenizer=token.tokenize),
+        'count': CountVectorizer(stop_words='english', max_features=max_features, ngram_range=(1,2), tokenizer=token.tokenize),
+    }
     DATASET_ENCODING = "ISO-8859-1"
     dataset = pd.read_csv(request.FILES['csv_file'], delimiter=',', encoding=DATASET_ENCODING)
-    form = request.POST
     text = form['column_1']
     target = form['column_2']
-    max_features = int(form['max_features'])
     test_size = float(form['test-size'])
     algorithm = str(form['algo'])
+    transformer = str(form['transf'])
     
     dataset = dataset[[text,target]]
     dataset.drop_duplicates()
     
-    token = RegexpTokenizer(r'[a-zA-Z0-9]+')
-
-    tfidf = TfidfVectorizer(stop_words='english', max_features=max_features, ngram_range=(1,2), tokenizer=token.tokenize)
+    vectorizer = transformers[transformer]
 
     X = dataset[text]
 
-    X = tfidf.fit_transform(dataset[text])
+    X = vectorizer.fit_transform(dataset[text])
 
     y = dataset[target]
 
@@ -158,17 +165,17 @@ def train_result(request):
     
     # exporting the model and the trained vectorizer
     pickle.dump(model, open('static/trained_models/model', 'wb'))
-    pickle.dump(tfidf, open('static/fitted_vector/tfidf_vectorizer', 'wb'))
+    pickle.dump(vectorizer, open('static/fitted_vector/vectorizer', 'wb'))
     
     with open('static/trained_models/model', 'rb') as f:
         model = pickle.load(f)
     
-    tfidf = pickle.load(open(f'static/fitted_vector/tfidf_vectorizer',"rb"))
+    vectorizer = pickle.load(open(f'static/fitted_vector/vectorizer',"rb"))
     
     context = {
         'acc': int((float(acc.get("accuracy"))*100)),
         'model': model,
-        'vector': tfidf,
+        'vector': vectorizer,
     }
     
     return render(request, './train_result.html', context=context)
