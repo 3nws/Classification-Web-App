@@ -33,28 +33,16 @@
     <div class="form-group">
       <div class="row">
         <div class="col-md-6">
-          <label for="column-1" class="col-xs-12 control-label">
+          <label for="column_1" class="col-xs-12 control-label">
             Text column name:
           </label>
-          <input
-            type="text"
-            name="column_1"
-            id="column_1"
-            required="True"
-            class="form-control form-input"
-          />
+          <select name="column_1" id="column_1"></select>
         </div>
         <div class="col-md-6">
           <label for="column-2" class="col-xs-12 control-label">
             Target column name:
           </label>
-          <input
-            type="text"
-            name="column_2"
-            id="column_2"
-            required="True"
-            class="form-control form-input"
-          />
+          <select name="column_2" id="column_2"></select>
         </div>
       </div>
       <div class="row">
@@ -135,8 +123,21 @@
 
   function parseData(data) {
     let csvData = [];
-    let lbreak = data.split("\n");
-    console.table(lbreak[0]);
+    let headers = data.split("\n")[0].split(",");
+    headers[headers.length - 1] = headers[headers.length - 1].slice(0, -1);
+    console.table(headers);
+    columnSelect1 = document.getElementById("column_1");
+    columnSelect2 = document.getElementById("column_2");
+    headers.forEach((header) => {
+      columnSelect1.options[columnSelect1.options.length] = new Option(
+        header,
+        header
+      );
+      columnSelect2.options[columnSelect2.options.length] = new Option(
+        header,
+        header
+      );
+    });
   }
 </script>
 

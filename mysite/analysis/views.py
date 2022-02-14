@@ -133,8 +133,8 @@ def train_result(request):
     }
     DATASET_ENCODING = "ISO-8859-1"
     dataset = pd.read_csv(request.FILES['csv_file'], delimiter=',', encoding=DATASET_ENCODING)
-    text = form['column_1']
-    target = form['column_2']
+    text = str(form['column_1'])
+    target = str(form['column_2'])
     test_size = float(form['test-size'])
     algorithm = str(form['algo'])
     transformer = str(form['transf'])
