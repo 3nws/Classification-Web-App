@@ -22,6 +22,7 @@
         <input
           type="file"
           name="csv_file"
+          onChange="readCSV(this)"
           id="csv_file"
           required="True"
           class="form-control form-input"
@@ -113,5 +114,30 @@
     </div>
   </div>
 </form>
+<script>
+  var obj_csv = {
+    size: 0,
+    dataFile: [],
+  };
+
+  function readCSV(input) {
+    console.log(input);
+    if (input.files && input.files[0]) {
+      let reader = new FileReader();
+      reader.readAsBinaryString(input.files[0]);
+      reader.onload = function (e) {
+        obj_csv.size = e.total;
+        obj_csv.dataFile = e.target.result;
+        parseData(obj_csv.dataFile);
+      };
+    }
+  }
+
+  function parseData(data) {
+    let csvData = [];
+    let lbreak = data.split("\n");
+    console.table(lbreak[0]);
+  }
+</script>
 
 {% endblock %}
